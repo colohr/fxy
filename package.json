@@ -1,15 +1,13 @@
 {
   "name": "fxy",
-  "version": "0.0.1",
+  "version": "0.0.6",
   "description": "Proxies",
   "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colohr/fxy.git"
   },
-  "keywords": [
-    "Proxy"
-  ],
+  "keywords": [],
   "author": "colohr",
   "license": "ISC",
   "bugs": {
@@ -24,7 +22,9 @@
     "lodash.has": "^4.5.2",
     "lodash.kebabcase": "^4.1.1",
     "lodash.merge": "^4.6.0",
-    "lodash.snakecase": "^4.1.1"
+    "lodash.set": "^4.3.2",
+    "lodash.snakecase": "^4.1.1",
+    "lodash.unset": "^4.5.2"
   },
   "devDependencies": {}
 }
