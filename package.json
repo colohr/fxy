@@ -1,6 +1,6 @@
 {
   "name": "fxy",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "Proxies",
   "main": "./index.js",
   "repository": {
@@ -24,7 +24,9 @@
     "lodash.merge": "^4.6.0",
     "lodash.set": "^4.3.2",
     "lodash.snakecase": "^4.1.1",
-    "lodash.unset": "^4.5.2"
+    "lodash.unset": "^4.5.2",
+    "lodash.words": "^4.2.0",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {}
 }
