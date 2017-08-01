@@ -1,7 +1,7 @@
 {
   "name": "fxy",
   "version": "0.1.5",
-  "description": "Proxies",
+  "description": "File System Proxies",
   "main": "./index.js",
   "repository": {
     "type": "git",
