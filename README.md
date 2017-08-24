@@ -155,13 +155,13 @@ FXY = `
         words: [Function: words]
         _: [Function]
         
-        - fxy.proper('somethingWrittenRhetorically') 
+        - fxy.id.proper('somethingWrittenRhetorically') 
             = "Something Written Rhetorically"
-        - fxy.medial('Hi There') = "hiThere"
-            - or you can use it rhetorically like "fxy.camel"
-        - fxy._('underscore me please') = "underscore_me_please"
-            - also "fxy.underscore"
-            - rhetorically: fxy.snake('snakeCase sounds rhetorical')
+        - fxy.id.medial('Hi There') = "hiThere"
+            - or you can use it rhetorically like "fxy.id.camel"
+        - fxy.id._('underscore me please') = "underscore_me_please"
+            - also "fxy.id.underscore"
+            - rhetorically: fxy.id.snake('snakeCase sounds rhetorical')
                 = "snake_case_sounds_rhetorical"
             
 ├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
@@ -218,7 +218,7 @@ FXY = `
         
         - fxy.is.text("hello") = true
         - fxy.is.text(2309) = false
-            - rhetorically: fxy.id.string(null) = false
+            - rhetorically: fxy.is.string(null) = false
             
         - fxy.is.TF(false) = true
             - rhetorically: fxy.is.bool("false") = false
