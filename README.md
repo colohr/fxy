@@ -1,13 +1,214 @@
 FXY
 =============
+A filesystem Node.js module.
 
-Install `fxy` 
+Proxy of "fs" + "path" modules with "fs" functions promised. Additional tools relevant to file system workflow are also included like:
+- "fxy.tree" for synchronous listing of directories or targeted files
+- "fxy.json.*" sync or async for writing & reading json 
+- "mkdirp" 
+- "lodash" functions for strings for working with file names
+
+Also uses the "url" module except those colliding with "path" module but may be accessed via "fxy.url". 
+
+Installing `fxy` 
 -------------
 ```
-  npm i fxy
+  npm install fxy
 ```
 
-FS
+FXY
+-------------
+```js
+const fxy = require('fxy')
+
+let object = { a:{ b: { c:true } } }
+fxy.dot.get(object,'a.b.c') // = true
+
+
+//unique to fxy
+
+//note: fxy.* things return "null" values for nothingness because I never use "undefined"
+FXY = `
+┌─────────┬───────┬──────────────┬──────────┬──────────┬────────┐
+│ (index) │ owner │ property     │ type     │ promised │ unique │
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 0       │ fxy   │ Item         │ class    │ false    │ true   │
+    • a general file system item
+    • is a Map instance
+    • results from fxy.tree are instances of fxy.Item
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 1       │ fxy   │ Jsons        │ class    │ false    │ true   │
+    • Turns a folder into a working object of json files.
+    • Setting the fxy.root = "/path/to/jsons/folder" will add a 
+      Jsons instance to "fxy" accessible via "fxy.jsons"
+        - fxy.jsons.hello = {value:"world"}
+        - results in a "/path/to/jsons/folder/hello.json" file
+        - if you have other jsons file they can be used
+        - fxy.jsons.other_file.date = new Date()
+        - results in updated "other_file.json"
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 2       │ fxy   │ as           │ object   │ false    │ true   │
+    • Converts values to other values
+        - fxy.as.number('1234') = 1234
+    • Other helper actions included
+        - fxy.as.one({},{a:2},{a:1,b:1}) = {a:2,b:1} // uses "lodash.merge"
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 3       │ fxy   │ copy         │ promise  │ true     │ true   │
+    • copies things async + promised
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 4       │ fxy   │ copySync     │ function │ false    │ true   │
+    • copies things
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 5       │ fxy   │ copy_folder  │ function │ false    │ true   │
+    • copies entire folder of things 
+    • all the things in there
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 6       │ fxy   │ dot          │ function │ false    │ true   │
+    • dot notation values
+        - let object = { a: { b: { c:true } } }
+          fxy.dot.get(object,'a.b.c') // = true 
+         
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 7       │ fxy   │ id           │ object   │ false    │ true   │
+    • reformatting & working with text
+        - fxy.proper('somethingWrittenRhetorically') 
+            = "Something Written Rhetorically"
+        - fxy.medial('Hi There') = "hiThere"
+            - or you can use it rhetorically like "fxy.camel"
+        - fxy._('underscore me please') = "underscore_me_please"
+            - also "fxy.underscore"
+            - rhetorically: fxy.snake('snakeCase sounds rhetorical')
+                = "snake_case_sounds_rhetorical"
+            
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 8       │ fxy   │ is           │ object   │ false    │ true   │
+    • tells it like it is
+        - fxy.is.array({}) = true
+        
+        - fxy.is.count("hi" || [1,2], min=3) = false
+        
+        - fxy.is.data({}) = true
+        - fxy.is.data([]) = false
+        
+        - fxy.is.empty(" " || "" || [] || {}) = true
+        
+        - fxy.is.numeric("1px") = true
+        - fxy.is.number("1px") = false
+        - fxy.is.number(NaN) = false
+        - fxy.is.number(1) = true
+            
+        - fxy.is.object({} || [] || new Map()) = true
+        - fxy.is.object(null) = false
+        
+        - fxy.id.text("hello") = true
+        - fxy.id.text(2309) = false
+            - rhetorically: fxy.id.string(null) = false
+            
+        - fxy.is.TF(false) = true
+            - rhetorically: fxy.is.bool("false") = false
+            
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 9       │ fxy   │ json         │ object   │ false    │ true   │
+    • json files
+    + read: [Function: read],
+      readSync: [Function: readSync],
+      write: [Function: write],
+      writeSync: [Function: writeSync]
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 10      │ fxy   │ jsons        │ object   │ false    │ true   │
+    • A Jsons instance when setting a fxy.root = "path/to/jsons/folder"
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 11      │ fxy   │ list         │ function │ false    │ true   │
+    • lists things in folder
+    - fxy.list("folder/of/things") = ["thing 1", "thing-2.js" ]
+    - fxy.list("folder/of/things").dirs = ["thing 1"]
+    - fxy.list("folder/of/things").files("js") = ["thing-2.js"]
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 12      │ fxy   │ ls           │ function │ false    │ true   │
+    - rhetorical name for fxy.list 
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 13      │ fxy   │ make_folder  │ object   │ false    │ true   │
+    • "mkdirp" with unrhetorical names
+    + promise: [Function: make_directories],
+      sync: [Function: make_directories_sync]
+      
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 14      │ fxy   │ make_folders │ function │ false    │ true   │
+    • "mkdirp.sync" with unrhetorical name
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 15      │ fxy   │ media        │ function │ false    │ true   │
+    • File media/content type information
+    - fxy.media("song.mp3") = {content_type:"audio/mp3",...other_info}
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 16      │ fxy   │ mkdirp       │ function │ false    │ true   │
+    • access "mkdirp" module
+
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 17      │ fxy   │ read_item    │ function │ false    │ true   │
+    • Read an file system path
+    - song = fxy.read_item("folder/song.mp3")
+        - song.name = "song.mp3"
+        - song.get('path') = "folder/song.mp3"
+        - song.get('type') = {directory:false,...other_info}
+        - song.content = contents of file as text
+        
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 18      │ fxy   │ root         │ string   │ false    │ true   │
+    • creates a Jsons instance for fxy.jsons
+    
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 19      │ fxy   │ source       │ object   │ false    │ true   │
+    • adjusts rhetorical problems dealing with source paths & urls
+    + file: [Function: get_file],
+      folder: [Function: get_folder],
+      url: [Function: get_url]
+    - fxy.source.url("https://aaah.com/hi//messy","/o.html")
+        = "https://aaah.com/hi/messy/o.html"
+        
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 20      │ fxy   │ tag          │ object   │ false    │ true   │
+    • a copy of MDN's "Tagged template literals" example #2
+      @ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+ 
+├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
+│ 21      │ fxy   │ tree         │ function │ false    │ true   │
+    • get tree of folder
+    • results are PathItem instances which is extended by fxy.Item
+    
+    - tree = fxy.tree("folder",...extension_name_or_file_name_to_filter)
+    
+    //target file type or name
+    - tree = fxy.tree("folder","mp3" || ".mp3" || "mp3_file.mp3") //PathItem
+      - tree.items = [a_folder,mp3_file] // [...PathItem]
+      - tree.items[0].items = [...a_folder_items] // [...PathItem]
+      - tree.items[0].content = [...a_folder_items] //gets .items if folder
+      - tree.items[1].items = [] //its a file
+      - tree.items[1].content = a ready-to-use Base64 uri of mp3_file.mp3
+      
+   - tree = fxy.tree("folder","js")
+        - tree.items.only = [...js_files_only] //searches inner folders
+        
+   - hidden shit like ".DS_Store" are skipped
+        - want them? use: fxy.tree("folder",true,...extension_name_or_file_name_to_filter)   
+   
+      
+└─────────┴───────┴──────────────┴──────────┴──────────┴────────┘
+`
+```
+
+fs
 -------------
 ```js
 const fxy = require('fxy')
@@ -17,7 +218,7 @@ fxy.readFile('file.txt')
    .catch(error=>console.error(error))
 
 
-//fs
+//fs cheat sheet
 FS = `
 ┌─────────┬───────┬───────────────────┬──────────┬──────────┬────────┐
 │ (index) │ owner │ property          │ type     │ promised │ unique │
@@ -195,15 +396,14 @@ FS = `
 ```
 
 
-PATH
+path
 -------------
 ```js
 const fxy = require('fxy')
+fxy.join(__dirname,'a','b','c') // = current/directory/a/b/c
 
-fxy.join(__dirname,'a','b','c') // = current/working/directory/a/b/c
 
-
-//path
+//path cheat sheet
 PATH = `
 ┌─────────┬───────┬────────────┬──────────┬──────────┬────────┐
 │ (index) │ owner │ property   │ type     │ promised │ unique │
@@ -238,56 +438,4 @@ PATH = `
 ├─────────┼───────┼────────────┼──────────┼──────────┼────────┤
 │ 14      │ path  │ win32      │ object   │ false    │ true   │
 └─────────┴───────┴────────────┴──────────┴──────────┴────────┘`
-```
-
-FXY
--------------
-```js
-const fxy = require('fxy')
-
-let object = { a:{ b: { c:true } } }
-fxy.dot.get(object,'a.b.c') // = true
-
-
-//unique to fxy
-FXY = `
-┌─────────┬───────┬─────────────┬──────────┬──────────┬────────┐
-│ (index) │ owner │ property    │ type     │ promised │ unique │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 0       │ fxy   │ Jsons       │ class    │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 1       │ fxy   │ as          │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 2       │ fxy   │ copier      │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 3       │ fxy   │ copy        │ promise  │ true     │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 4       │ fxy   │ copySync    │ function │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 5       │ fxy   │ dot         │ function │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 6       │ fxy   │ folder      │ function │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 7       │ fxy   │ id          │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 8       │ fxy   │ is          │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 9       │ fxy   │ json        │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 10      │ fxy   │ jsons       │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 11      │ fxy   │ ks          │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 12      │ fxy   │ list        │ function │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 13      │ fxy   │ ls          │ function │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 14      │ fxy   │ methodology │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 15      │ fxy   │ root        │ string   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 16      │ fxy   │ tag         │ object   │ false    │ true   │
-├─────────┼───────┼─────────────┼──────────┼──────────┼────────┤
-│ 17      │ fxy   │ tree        │ function │ false    │ true   │
-└─────────┴───────┴─────────────┴──────────┴──────────┴────────┘`
 ```
