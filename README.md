@@ -21,12 +21,72 @@ FXY
 ```js
 const fxy = require('fxy')
 
-let object = { a:{ b: { c:true } } }
-fxy.dot.get(object,'a.b.c') // = true
+//join paths with path module function
+let examples_path = fxy.join(__dirname,'examples/folder')
 
+//check value type
+fxy.is.nothing(examples_path) //false
+fxy.is.text(examples_path) //true
+//rhetorically named version
+fxy.is.string(examples_path) //true
+
+//folder tree
+let tree = fxy.tree(examples_path,'index.js')
+/* tree
+  PathItem {
+  'path' => 'projects/examples/folder/wwi',
+  'type' => { directory: true, name: 'wwi', keeps: [ 'index.js' ] } } */
+
+let items = tree.items // array of PathItem
+/* items
+[ 
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/lib',
+    'type' => { directory: true, name: 'lib', keeps: [Object] } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/node_modules',
+    'type' => { directory: true, name: 'node_modules', keeps: [Object] } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/public',
+    'type' => { directory: true, name: 'public', keeps: [Object] } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/structs',
+    'type' => { directory: true, name: 'structs', keeps: [Object] } } 
+] */
+
+fxy.is.array(items) // true
+
+let files_only = tree.items.only // array of PathItem files only
+/* files_only
+[ PathItem {
+    'path' => 'projects/examples/folder/wwi/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/lib/data/common-core-standards/api/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/lib/data/common-core-standards/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/lib/data/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  PathItem {
+    'path' => 'projects/examples/folder/wwi/lib/index.js',
+    'type' => { file: true, name: 'index.js' } },
+  ... 1163 more items 
+] */
+
+let first_item = files_only[0]
+if(fxy.is.object(first_item)){
+	let first_item_path = first_item.get('path') //PathItem extends Map
+	fxy.is.file(first_item_path) // true
+	let first_item_content = first_item.content //utf8 text
+}
 
 //unique to fxy
-
 //note: fxy.* things return "null" values for nothingness because I never use "undefined"
 FXY = `
 ┌─────────┬───────┬──────────────┬──────────┬──────────┬────────┐
@@ -77,6 +137,24 @@ FXY = `
 ├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
 │ 7       │ fxy   │ id           │ object   │ false    │ true   │
     • reformatting & working with text
+    +   camel: [Getter],
+        capital: [Getter],
+        capitalize: [Function: capitalize],
+        class: [Function: class],
+        code: [Function],
+        dash: [Function],
+        dot_notation: [Function: dot_notation],
+        dots: [Getter],
+        kebab: [Getter],
+        medial: [Getter],
+        path: [Function: path],
+        proper: [Function: proper],
+        readable: [Function: readable],
+        snake: [Getter],
+        underscore: [Getter],
+        words: [Function: words]
+        _: [Function]
+        
         - fxy.proper('somethingWrittenRhetorically') 
             = "Something Written Rhetorically"
         - fxy.medial('Hi There') = "hiThere"
@@ -89,6 +167,37 @@ FXY = `
 ├─────────┼───────┼──────────────┼──────────┼──────────┼────────┤
 │ 8       │ fxy   │ is           │ object   │ false    │ true   │
     • tells it like it is
+    +   array: [Function: is_array],
+        bool: [Function: is_bool],
+        count: [Function: is_count],
+        data: [Function: is_data],
+        dir: [Getter],
+        file: [Function: file],
+        folder: [Function: folder],
+        email: [Function: is_email],
+        empty: [Function: is_empty],
+        error: [Function: is_error],
+        function: [Function: is_function],
+        hosted: [Function: is_hosted],
+        instance: [Function: is_instance],
+        ip: [Function: is_ip],
+        json: [Function: is_json],
+        localhost: [Function: is_localhost],
+        map: [Function: is_map],
+        nothing: [Function: is_nothing],
+        number: [Function: is_number],
+        object: [Function: is_object],
+        path: [Function: is_path],
+        ported: [Function: is_ported],
+        protocoled: [Function: is_protocoled],
+        set: [Function: is_set],
+        string: [Function: is_string],
+        symbol: [Function: is_symbol],
+        text: [Function: is_text],
+        TF: [Function: is_TF],
+        url: [Function: is_url],
+        numeric: [Function: is_numeric]
+          
         - fxy.is.array({}) = true
         
         - fxy.is.count("hi" || [1,2], min=3) = false
@@ -98,6 +207,7 @@ FXY = `
         
         - fxy.is.empty(" " || "" || [] || {}) = true
         
+        - fxy.is.nothing(null || undefined) = true
         - fxy.is.numeric("1px") = true
         - fxy.is.number("1px") = false
         - fxy.is.number(NaN) = false
@@ -106,8 +216,8 @@ FXY = `
         - fxy.is.object({} || [] || new Map()) = true
         - fxy.is.object(null) = false
         
-        - fxy.id.text("hello") = true
-        - fxy.id.text(2309) = false
+        - fxy.is.text("hello") = true
+        - fxy.is.text(2309) = false
             - rhetorically: fxy.id.string(null) = false
             
         - fxy.is.TF(false) = true

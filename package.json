@@ -1,13 +1,21 @@
 {
   "name": "fxy",
-  "version": "0.1.65",
-  "description": "File System Proxies",
+  "version": "0.1.66",
+  "description": "A file system tool that combines fs & path into 1 module with promises.",
   "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colohr/fxy.git"
   },
-  "keywords": [],
+  "keywords": [
+    "files",
+    "fs",
+    "path",
+    "filesystem",
+    "promised",
+    "url",
+    "tree"
+  ],
   "author": "colohr",
   "license": "ISC",
   "bugs": {
@@ -27,6 +35,5 @@
     "lodash.unset": "^4.5.2",
     "lodash.words": "^4.2.0",
     "mkdirp": "^0.5.1"
-  },
-  "devDependencies": {}
+  }
 }
