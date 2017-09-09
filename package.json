@@ -1,6 +1,6 @@
 {
   "name": "fxy",
-  "version": "0.1.66",
+  "version": "0.1.67",
   "description": "A file system tool that combines fs & path into 1 module with promises.",
   "main": "./index.js",
   "repository": {
