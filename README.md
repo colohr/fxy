@@ -1,7 +1,10 @@
-FXY
+fxy
 =============
-A filesystem Node.js module.
+Pronunciation /ˈfäksē/ or foxy
 
+
+A filesystem Node.js module.
+--
 Proxy of "fs" + "path" modules with "fs" functions promised. Additional tools relevant to file system workflow are also included like:
 - "fxy.tree" for synchronous listing of directories or targeted files
 - "fxy.json.*" sync or async for writing & reading json 
