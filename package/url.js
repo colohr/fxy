@@ -1,5 +1,3 @@
-
-
 const Url = {
   protocol: null,
   slashes: null,
@@ -31,7 +29,7 @@ const url_proxy = new Proxy({
 })
 
 
-
+//exports
 module.exports = new Proxy(url_value,{
   get(o,name){
     if(name === 'get') return get_url_value
@@ -47,7 +45,7 @@ module.exports = new Proxy(url_value,{
   }
 })
 
-
+//shared
 function get_url_value(key){
   return function url(value){ 
     let url_object = url_value(value)
@@ -56,7 +54,6 @@ function get_url_value(key){
 }
 
 function has_url_value(key){ return key in Url }
-
 
 function url_value(value){
   if(typeof value === 'string'){

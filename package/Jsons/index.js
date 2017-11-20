@@ -1,13 +1,10 @@
-
 const fs = require('fs')
 const pth = require('path')
-const ks = require('./id')
+const ks = require('../id')
 const merge = require('lodash.merge')
-
-
 const DontJson = Symbol.for('DontJson')
 const Save = Symbol.for('save')
-
+const $jsons = Symbol.for('jsons')
 const Key = {
   json:Symbol.for('jsonKey'),
   file:Symbol.for('fileKey')
@@ -37,8 +34,6 @@ const isPath = (filepath)=>{ return filepath.includes('.json');}
 
 const jsonFilter = name=>{return isPath(name)}
 
-
-
 const getJsons = (dirpath)=>{return fs.readdirSync(dirpath).filter(jsonFilter)}
 
 const readJson = (filepath)=>{
@@ -66,83 +61,9 @@ const writeJson = (filepath,json)=>{
   return true;
 }
 
-const $jsons = Symbol.for('jsons')
-
-
-function Joxy(object,json){
-  return new Proxy({
-    object,
-    json
-  },{
-    get(o,k){
-      if(k in o.object){
-        let v = o.object[k];
-        if(typeof v === 'object' && v !== null){
-          return Joxy(v,o.json);
-        }
-        return v;
-      }
-      return;
-    },
-    set(o,k,v){
-      let last = o.object[k]
-      if(last !== v){
-        o.object[k] = v;
-        return o.json[Save]();
-      }
-      return true;
-    },
-    has(o,name){
-      return name in o.object
-    },
-    deleteProperty(o,k){
-      delete o.object[k];
-      return o.json[Save]();
-    }
-  })
-};
 
 
 
-
-function Json(doc,jsons){
-
-  let jsonDoc = {
-    doc,[$jsons]:jsons
-  };
-  jsonDoc[Save] = function(){
-    let f = this.doc[Key.file];
-    return this[$jsons].$write(f,this.doc);
-  };
-  return new Proxy(jsonDoc,{
-    get(o,k){
-      if(k in o.doc){
-        let v = o.doc[k];
-        if(typeof v === 'object' && v !== null){
-          return Joxy(v,o);
-        }
-        return v;
-      }else if(k === Save){
-        return o[Save];
-      }
-      return;
-    },
-    set(o,k,v){
-      if(k !== Save){
-        o.doc[k] = v;
-        return o[Save]();
-      }
-      return true;
-    },
-    has(o,name){
-      return name in o.doc
-    },
-    deleteProperty(o,k){
-      delete o.doc[k];
-      return o[Save]();
-    }
-  })
-}
 
 
 
@@ -241,6 +162,84 @@ class Jsons{
   }
 }
 
+//exports
+module.exports = Jsons
 
 
-module.exports = Jsons;
+
+
+//shared actions
+function Joxy(object,json){
+	return new Proxy({
+		object,
+		json
+	},{
+		get(o,k){
+			if(k in o.object){
+				let v = o.object[k];
+				if(typeof v === 'object' && v !== null){
+					return Joxy(v,o.json);
+				}
+				return v;
+			}
+			return;
+		},
+		set(o,k,v){
+			let last = o.object[k]
+			if(last !== v){
+				o.object[k] = v;
+				return o.json[Save]();
+			}
+			return true;
+		},
+		has(o,name){
+			return name in o.object
+		},
+		deleteProperty(o,k){
+			delete o.object[k];
+			return o.json[Save]();
+		}
+	})
+};
+
+
+
+
+function Json(doc,jsons){
+	
+	let jsonDoc = {
+		doc,[$jsons]:jsons
+	};
+	jsonDoc[Save] = function(){
+		let f = this.doc[Key.file];
+		return this[$jsons].$write(f,this.doc);
+	};
+	return new Proxy(jsonDoc,{
+		get(o,k){
+			if(k in o.doc){
+				let v = o.doc[k];
+				if(typeof v === 'object' && v !== null){
+					return Joxy(v,o);
+				}
+				return v;
+			}else if(k === Save){
+				return o[Save];
+			}
+			return;
+		},
+		set(o,k,v){
+			if(k !== Save){
+				o.doc[k] = v;
+				return o[Save]();
+			}
+			return true;
+		},
+		has(o,name){
+			return name in o.doc
+		},
+		deleteProperty(o,k){
+			delete o.doc[k];
+			return o[Save]();
+		}
+	})
+}

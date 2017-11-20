@@ -1,11 +1,9 @@
 const path = require('path')
 
-
 //exports
 module.exports.file = get_file
 module.exports.folder = get_folder
 module.exports.url = get_url
-
 
 //shared actions
 function clean_slashes(value){
@@ -15,18 +13,6 @@ function clean_slashes(value){
 }
 
 function clean_text_array(...x){ return x.map(i=>valid_text(i)).filter(x=>x.length) }
-
-function get_url(...x){
-	let parts = clean_text_array(...x)
-	let protocol = get_protocol(parts[0])
-	let value = parts.join('/')
-	value = value.replace(protocol,'')
-	if(parts[0].includes('http')) {
-		value = value.replace('https:','').replace('http:','').replace('https','').replace('http','')
-	}
-	value = clean_slashes(value)
-	return `${protocol}${value}`
-}
 
 function get_folder(...x){
 	let parts = clean_text_array(...x)
@@ -41,10 +27,19 @@ function get_file(...x){
 
 function get_protocol(value){
 	value = valid_text(value)
-	if(value.includes('http')){
-		if(value.includes('https')) return 'https://'
+	return value.includes('https') ? 'https://':'http://'
+}
+
+function get_url(...x){
+	let parts = clean_text_array(...x)
+	let protocol = get_protocol(parts[0])
+	let value = parts.join('/')
+	value = value.replace(protocol,'')
+	if(parts[0].includes('http')) {
+		value = value.replace('https:','').replace('http:','').replace('https','').replace('http','')
 	}
-	return 'http://'
+	value = clean_slashes(value)
+	return `${protocol}${value}`
 }
 
 function valid_text(value){

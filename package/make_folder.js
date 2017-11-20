@@ -1,6 +1,7 @@
 const mkdirp = require('mkdirp')
 
 //exports
+module.exports = make_directories
 module.exports.promise = make_directories
 module.exports.sync = make_directories_sync
 
@@ -14,6 +15,4 @@ function make_directories(path){
   })
 }
 
-function make_directories_sync(path){
-  return mkdirp.sync(path)
-}
+function make_directories_sync(path){ return mkdirp.sync(path) }

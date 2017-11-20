@@ -1,8 +1,8 @@
 {
   "name": "fxy",
-  "version": "0.1.68",
+  "version": "0.1.7",
   "description": "A file system tool that combines fs & path into 1 module with promises.",
-  "main": "./index.js",
+  "main": "./package/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colohr/fxy.git"

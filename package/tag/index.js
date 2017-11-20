@@ -15,5 +15,5 @@ const SimpleClosure = function templateStringClosure(strings, ...keys) {
 }
 
 
-
+module.exports = SimpleClosure
 module.exports.closure = SimpleClosure;

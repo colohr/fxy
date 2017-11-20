@@ -1,6 +1,7 @@
 const fs = require('fs')
 
-const json = {
+//exports
+module.exports = {
 	read,
 	read_sync,
 	get readSync(){ return read_sync },
@@ -8,9 +9,6 @@ const json = {
 	write_sync,
 	get writeSync(){ return write_sync }
 }
-
-//exports
-module.exports = json
 
 //shared actions
 function get_readable(...readable){
@@ -40,17 +38,17 @@ function read_sync(file){
 	return data
 }
 
-function to_text(value,...readable){
-	try{
-	    let options = [value]
-        if(readable.length) options = options.concat(get_readable(...readable))
-	    return JSON.stringify(...options)
-	}
+function to_data(value){
+	try{ return JSON.parse(value) }
 	catch(e){ return e }
 }
 
-function to_data(value){
-	try{ return JSON.parse(value) }
+function to_text(value,...readable){
+	try{
+		let options = [value]
+		if(readable.length) options = options.concat(get_readable(...readable))
+		return JSON.stringify(...options)
+	}
 	catch(e){ return e }
 }
 

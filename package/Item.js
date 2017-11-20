@@ -1,8 +1,5 @@
-
 const FS = require('fs')
 const PATH = require('path')
-
-
 const keeps_hidden = Symbol('keeps hidden')
 
 const file_types = {
@@ -32,13 +29,10 @@ class Item extends Map{
 	
 }
 
+//exports
 module.exports = Item
 
-
-function read_item(path,keeps){
-	return new Item(path,FS.statSync(path),keeps)
-}
-
+//shared actions
 function get_content_file_type(extension){
 	if(extension instanceof Item) extension = PATH.extname(extension.get('path'))
 	for(let type in file_types){
@@ -51,9 +45,7 @@ function get_stat_type(path,stat,keep){
 	const type = {}
 	let name = PATH.basename(path)
 	if(stat.isFile()){
-		if(is_valid_file(PATH.extname(path),name,keep)){
-			type.file = true
-		}
+		if(is_valid_file(PATH.extname(path),name,keep)) type.file = true
 		else return null
 	}
 	else if(stat.isDirectory()){
@@ -90,3 +82,5 @@ function read_content(item){
 	}
 	return null
 }
+
+function read_item(path,keeps){ return new Item(path,FS.statSync(path),keeps) }

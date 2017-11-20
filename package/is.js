@@ -23,6 +23,7 @@ module.exports = {
 	map:is_map,
 	nothing:is_nothing,
 	number:is_number,
+	numeric:is_numeric,
 	object:is_object,
 	path:is_path,
 	ported:is_ported,
@@ -66,6 +67,7 @@ function is_localhost(value){ return is_url(value) && value.includes('localhost'
 function is_map(value){ return is_object(value) && value instanceof Map }
 function is_nothing(value){ return typeof value === 'undefined' || value === null || (typeof value === 'number' && isNaN(value)) }
 function is_number(value){ return typeof value === 'number' && !isNaN(value) && isFinite(value) }
+function is_numeric(value) { return require('./as').numeral(value).valuable }
 function is_object(value){ return typeof value === 'object' && value !== null }
 function is_path(value,accept_not_resolved=false){
 	if(is_text(value) && value.length){
