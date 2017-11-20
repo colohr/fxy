@@ -1,7 +1,7 @@
 {
   "name": "fxy",
   "version": "0.1.7",
-  "description": "A file system tool that combines fs & path into 1 module with promises.",
+  "description": "File System Toolbox: includes promised fs, path, folder tree, type checking & more.",
   "main": "./package/index.js",
   "repository": {
     "type": "git",
@@ -12,9 +12,8 @@
     "fs",
     "path",
     "filesystem",
-    "promised",
-    "url",
-    "tree"
+    "promises",
+    "async directory tree"
   ],
   "author": "colohr",
   "license": "ISC",
