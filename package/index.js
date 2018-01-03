@@ -17,6 +17,9 @@ const fxy = {
 	get copy_folder(){
 		return this.copy.directory
 	},
+	get data(){
+		return require('./data')
+	},
 	//get value with dot notation
 	get dot() {
 		return require('./dot')

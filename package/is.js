@@ -1,6 +1,6 @@
 const email_regular_expression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const ip_regular_expression = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
-const url_protocols = ['http://','https://']
+const url_protocols = ['http://','https://','ws://']
 
 //exports
 module.exports = {
@@ -8,6 +8,7 @@ module.exports = {
 	get bool(){ return is_TF },
 	count:is_count,
 	data:is_data,
+	date:is_date,
 	get dir(){return is_folder },
 	email:is_email,
 	empty:is_empty,
@@ -27,6 +28,7 @@ module.exports = {
 	object:is_object,
 	path:is_path,
 	ported:is_ported,
+	promise:is_promise,
 	protocoled:is_protocoled,
 	set:is_set,
 	get string(){ return is_text },
@@ -47,6 +49,7 @@ function is_count(value,count = 1){
 	return false
 }
 function is_data(value){ return is_object(value) && !is_array(value) && !is_error(value) }
+function is_date(value){ return is_data(value) && value instanceof Date }
 function is_email(value){ return is_text(value) && email_regular_expression.test(value) }
 function is_empty(value){ return !is_count(value) }
 function is_error(value){ return is_object(value) && value instanceof Error }
@@ -77,6 +80,7 @@ function is_path(value,accept_not_resolved=false){
 	return false
 }
 function is_ported(value){ return is_url(value) && value.includes(':') }
+function is_promise(value){ return is_object(value) && value instanceof Promise }
 function is_protocoled(value,...protocols){
 	if(is_text(value)){
 		let checks = protocols.concat(url_protocols)

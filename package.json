@@ -1,6 +1,6 @@
 {
   "name": "fxy",
-  "version": "0.1.7",
+  "version": "0.1.71",
   "description": "File System Toolbox: includes promised fs, path, folder tree, type checking & more.",
   "main": "./package/index.js",
   "repository": {
