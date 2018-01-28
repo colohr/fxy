@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const root_json = Symbol('the json root')
 const class_names = ['FSWatcher', 'ReadStream', 'Stats', 'WriteStream', 'Jsons', 'SyncWriteStream']
 const prevent_promise = ['exists', 'constants', 'createReadStream', 'createWriteStream'].concat(class_names)
 
@@ -49,21 +48,9 @@ const fxy = {
 	get json() {
 		return require('./json')
 	},
-	//shared Json instance proxy
-	get jsons() {
-		return this[root_json] ? this[root_json].$proxy() : null
-	},
-	//Jsons class
-	get Jsons() {
-		return require('./jsons')
-	},
 	//list files & directories
 	get list() {
 		return require('./list')
-	},
-	//same as list
-	get ls() {
-		return this.list
 	},
 	//get media info/meta
 	get media(){
@@ -85,13 +72,6 @@ const fxy = {
 	get read_item(){
 		return this.Item.read
 	},
-	//root handlers for shared Jsons instance in fxy module
-	get root() {
-		return this[root_json] ? this[root_json].$root : undefined
-	},
-	set root(pathname) {
-		return this[root_json] = this.Jsons.create(pathname)
-	},
 	//source url or path fixologist
 	get source(){
 		return require('./source')
@@ -107,6 +87,9 @@ const fxy = {
 	//basic url module
 	get url(){
 		return require('./url')
+	},
+	get version(){
+		return require('../package.json').version
 	}
 }
 

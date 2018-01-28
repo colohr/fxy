@@ -15,10 +15,8 @@ class Item extends Map{
 	static get types(){ return file_types }
 	static valid(type,name,keep_file_types_and_names){ return is_valid_file(type,name,keep_file_types_and_names) }
 	constructor(...x){
-		super([
-			['path',x[0]],
-			['type',get_stat_type(...x)]
-		])
+		super([ ['path',x[0]], ['type',get_stat_type(...x)] ])
+		if(this.get('type') !== null) this.set('name',this.get('type').file ? this.get('type').id:this.name)
 	}
 	get content(){
 		return this.get('type').file ? read_content(this):('items' in this ? this.items:null)
@@ -26,7 +24,6 @@ class Item extends Map{
 	get name(){
 		return this.get('type').name
 	}
-	
 }
 
 //exports
@@ -41,26 +38,43 @@ function get_content_file_type(extension){
 	return 'text'
 }
 
-function get_stat_type(path,stat,keep){
-	const type = {}
-	let name = PATH.basename(path)
-	if(stat.isFile()){
-		if(is_valid_file(PATH.extname(path),name,keep)) type.file = true
-		else return null
-	}
-	else if(stat.isDirectory()){
+function get_stat_type(location,stat,keep){
+	let type = { name:PATH.basename(location) }
+	const type_name = stat.isDirectory() ? 'folder':(stat.isFile() && is_valid(...get_inputs()) ? 'file':null)
+	if(type_name === null) return type = null
+	type[type_name] = true
+	if(type.folder){
 		type.directory = true
-		type.name = name
 		type.keeps = keep
 	}
-	type.name = name
+	else type.id = type.name.replace(type.extension,'')
 	return type
+	//shared actions
+	function get_inputs(){ return [type.extension=PATH.extname(location),type.name,location,keep] }
+	//if(stat.isFile()){
+	//	if(is_valid_location(PATH.extname(location),name,location,keep)) type.file = true
+	//	else return null
+	//}
+	//else if(stat.isDirectory()){
+	//	type.directory = true
+	//	type.name = name
+	//	type.keeps = keep
+	//}
 }
 
 function is_valid_file(type,name,keep){
 	if(!keep[keeps_hidden] && name.indexOf('.') === 0) return false
 	if(!keep.length) return true
 	return keep.indexOf(type) >= 0 || keep.indexOf(name) >= 0
+}
+
+function is_valid(type,name,location,keep){
+	if(is_valid_file(type,name,keep)) return true
+	const locations = keep.filter(name=>name.indexOf('/')>=0)
+	if(locations.length){
+		return locations.filter(name=>location.indexOf(name)>=0).length > 0
+	}
+	return false
 }
 
 function read_content(item){
@@ -75,12 +89,8 @@ function read_content(item){
 			let uri_prefix = `data:image/${extension.replace('.','')};base64,`
 			item.set('content data uri prefix',uri_prefix)
 			return `${uri_prefix} ${FS.readFileSync(path).toString(encoding)}`
-			break
-		default:
-			return FS.readFileSync(path,encoding)
-			break
+		default: return FS.readFileSync(path,encoding)
 	}
-	return null
 }
 
 function read_item(path,keeps){ return new Item(path,FS.statSync(path),keeps) }
