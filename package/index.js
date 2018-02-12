@@ -8,6 +8,10 @@ const fxy = {
 	get ['as']() {
 		return require('./as')
 	},
+	//app json
+	get app(){
+		return require('./app')
+	},
 	//copy options
 	get copy() {
 		return require('./copier')
