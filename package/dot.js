@@ -55,7 +55,7 @@ function dot_set(object, notation, value) {
 }
 
 function dot_delete(object, notation) {
-	console.log(object,notation, notation in object)
+	//console.log(object,notation, notation in object)
 	if(is.object(object) && !is.nothing(notation)){
 		if(notation in object) delete object[notation]
 		else return unset(object,notation)

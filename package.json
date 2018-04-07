@@ -1,20 +1,13 @@
 {
   "name": "fxy",
-  "version": "0.1.721",
+  "version": "0.1.723",
   "description": "File System Tool",
   "main": "./package/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colohr/fxy.git"
   },
-  "keywords": [
-    "files",
-    "fs",
-    "path",
-    "filesystem",
-    "promises",
-    "async directory tree"
-  ],
+  "keywords": [],
   "author": "colohr",
   "license": "ISC",
   "bugs": {
@@ -34,5 +27,8 @@
     "lodash.unset": "^4.5.2",
     "lodash.words": "^4.2.0",
     "mkdirp": "^0.5.1"
+  },
+  "scripts":{
+    "test":"node tests"
   }
 }

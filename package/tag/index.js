@@ -1,7 +1,3 @@
-
-
-
-
 const SimpleClosure = function templateStringClosure(strings, ...keys) {
   return (function(...values) {
     var dict = values[values.length - 1] || {};
@@ -14,6 +10,7 @@ const SimpleClosure = function templateStringClosure(strings, ...keys) {
   });
 }
 
-
+//exports
 module.exports = SimpleClosure
-module.exports.closure = SimpleClosure;
+module.exports.data = require('./data')
+module.exports.closure = SimpleClosure

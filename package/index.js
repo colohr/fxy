@@ -36,6 +36,7 @@ const fxy = {
 		if(extension.length) folder_name = path.basename(x.replace(folder_name,''))
 		return folder_name
 	},
+	get fragment(){ return require('./fragment') },
 	//text reformatting for various cases/identities
 	get id() {
 		return require('./id')
