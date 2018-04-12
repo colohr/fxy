@@ -4,8 +4,11 @@ const url_protocols = ['http://','https://','ws://']
 
 //exports
 module.exports = {
+	action:is_action,
+	async:is_async,
 	array:is_array,
 	get bool(){ return is_TF },
+	class:is_class,
 	count:is_count,
 	data:is_data,
 	date:is_date,
@@ -16,13 +19,16 @@ module.exports = {
 	file:is_file,
 	folder:is_folder,
 	function:is_function,
+	has:is_has,
 	hosted:is_hosted,
+	in:is_in,
 	instance:is_instance,
 	ip:is_ip,
 	json:is_json,
 	localhost:is_localhost,
 	map:is_map,
 	nothing:is_nothing,
+	not:is_not,
 	number:is_number,
 	numeric:is_numeric,
 	object:is_object,
@@ -39,7 +45,19 @@ module.exports = {
 }
 
 //shared actions
+function is_action(value){
+	return is_function(value) && (is_async(value) || test_action() === true)
+	//shared actions
+	function test_action(){
+		if(is_not(value, 'prototype') || is_not(value, 'constructor')) return false
+		if(value.constructor.name !== 'Function') return false
+		else try{ return (value(),true) }catch(e){ return false }
+	}
+}
+
 function is_array(value){ return is_object(value) && Array.isArray(value) }
+function is_async(value){ return is_function(value) && value.constructor.name === 'AsyncFunction' }
+function is_class(value){ return is_function(value) && !is_action(value) }
 function is_count(value,count = 1){
 	if(is_nothing(value)) return false
 	if(is_text(value)) value = value.trim()
@@ -62,12 +80,15 @@ function is_folder(value){
 	try{ return require('fs').statSync(value).isDirectory() }
 	catch(e){ return false }
 }
+function is_has(value){ return is_object(value) || is_function(value) }
 function is_hosted(value){ return is_url(value) && !is_localhost(value) }
+function is_in(value,field){ return is_has(value) && field in value }
 function is_instance(value,type){ return is_object(value) && is_function(type) && value instanceof type }
 function is_ip(value){ return is_text(value) && ip_regular_expression.test(value) }
 function is_json(value){ return is_text(value) && /^[\],:{}\s]*$/.test(value.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, '')) }
 function is_localhost(value){ return is_url(value) && value.includes('localhost') }
 function is_map(value){ return is_object(value) && value instanceof Map }
+function is_not(value,field){ return is_in(value,field) === false }
 function is_nothing(value){ return typeof value === 'undefined' || value === null || (typeof value === 'number' && isNaN(value)) }
 function is_number(value){ return typeof value === 'number' && !isNaN(value) && isFinite(value) }
 function is_numeric(value) { return require('./as').numeral(value).valuable }
