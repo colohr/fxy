@@ -1,6 +1,6 @@
 {
   "name": "fxy",
-  "version": "0.1.724",
+  "version": "0.1.725",
   "description": "File System Tool",
   "main": "./package/index.js",
   "repository": {

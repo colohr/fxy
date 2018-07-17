@@ -45,6 +45,7 @@ module.exports = get_content_type
 
 //shared actions
 function get_content_type(file_type){
+	file_type=file_type.toLowerCase()
 	for(let name in content_types){
 		let tags = content_types[name]
 		if(tags.includes(file_type)) return name

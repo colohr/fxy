@@ -1,4 +1,5 @@
 const Fragments = {
+	get escape(){ return escape },
 	get get(){ return get_fragment },
 	get has(){ return has_fragment },
 	get replace(){ return replace_fragment },
@@ -14,6 +15,8 @@ module.exports = new Proxy(text_fragments,{
 })
 
 //shared actions
+function escape(text){ return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') }
+
 function get_fragment(text,start,end){
 	if(!has_fragment(text,start,end)) return ''
 	return text.substring(text.lastIndexOf(start)+start.length,text.lastIndexOf(end))
