@@ -18,7 +18,7 @@ function get_data_file(...x){ return get_data_files(...x).join('') }
 function get_data_files(...x){
 	const inputs = get_inputs(...x)
 	const contents = inputs.content.map(file=>require('fs').readFileSync(file, 'utf8'))
-	const start_end = !inputs.start_end ?  ['${(', ')}']:[]
+	const start_end = !inputs.start_end ?  ['\$\{(', ')\}']:[]
 	return contents.map(content=>{
 		const fragment = get_fragment(content, start_end)
 		return fragment.item(fragment=>get_value(fragment, inputs.data))

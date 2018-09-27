@@ -1,6 +1,6 @@
 {
   "name": "fxy",
-  "version": "0.1.725",
+  "version": "0.1.726",
   "description": "File System Tool",
   "main": "./package/index.js",
   "repository": {
@@ -21,14 +21,17 @@
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.kebabcase": "^4.1.1",
-    "lodash.merge": "^4.6.0",
+    "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",
     "lodash.snakecase": "^4.1.1",
     "lodash.unset": "^4.5.2",
     "lodash.words": "^4.2.0",
     "mkdirp": "^0.5.1"
   },
-  "scripts":{
-    "test":"node tests"
+  "peerDependencies": {
+    "better-console": "^1.0.1"
+  },
+  "scripts": {
+    "test": "node tests"
   }
 }
