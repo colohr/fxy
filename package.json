@@ -1,20 +1,10 @@
 {
-  "name": "fxy",
-  "version": "0.1.726",
-  "description": "File System Tool",
-  "main": "./package/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/colohr/fxy.git"
-  },
-  "keywords": [],
   "author": "colohr",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/colohr/fxy/issues"
   },
-  "homepage": "https://github.com/colohr/fxy#readme",
   "dependencies": {
+    "better-console": "^1.0.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.capitalize": "^4.2.1",
     "lodash.clone": "^4.5.0",
@@ -26,12 +16,17 @@
     "lodash.snakecase": "^4.1.1",
     "lodash.unset": "^4.5.2",
     "lodash.words": "^4.2.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "node-yaml": "^3.1.1"
   },
-  "peerDependencies": {
-    "better-console": "^1.0.1"
+  "description": "File System Module Proxy & Tools",
+  "homepage": "https://github.com/colohr/fxy#readme",
+  "license": "ISC",
+  "main": "./package/index.js",
+  "name": "fxy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colohr/fxy.git"
   },
-  "scripts": {
-    "test": "node tests"
-  }
+  "version": "0.2.7"
 }

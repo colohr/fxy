@@ -18,7 +18,6 @@ const array_filters = {
 			'isPrototypeOf',
 			'__proto__',
 			'valueOf'
-
 		]
 	},
 	empty:{
@@ -56,7 +55,7 @@ const as = {
 //exports
 module.exports = as
 
-//shared actions
+//scope actions
 function as_a(reduction, type, ...items){
 	let input = []
 	if(type === 'map') {

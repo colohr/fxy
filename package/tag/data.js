@@ -1,4 +1,3 @@
-
 //exports
 module.exports = get_data
 module.exports.file = get_data_file
@@ -6,7 +5,7 @@ module.exports.files = get_data_files
 module.exports.fragment = get_data_fragment
 module.exports.value = get_value
 
-//shared actions
+//scope actions
 function get_data(...x){
 	const inputs = get_inputs(...x)
 	const fragment = get_fragment(inputs.content[0], inputs.start_end)
@@ -46,7 +45,16 @@ function get_inputs(...x){
 
 function get_value(fragment, data){
 	if(fragment in data) return data[fragment]
-	return eval(`(x)=>(x.${fragment})`)(data)
+	let value = null
+	try{ value = eval(`function evaluate(x){ return (x.${fragment}) }`)(data) }
+	catch(e){ value = reduce_value() }
+	return value === null || typeof value === 'undefined' ? '':value
+
+	//scope actions
+	function reduce_value(){
+		try{return fragment.split('.').reduce((o, i)=>o[i], data)}
+		catch(e){return null}
+	}
 }
 
 

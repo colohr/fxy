@@ -7,14 +7,9 @@ const Fragments = {
 }
 
 //exports
-module.exports = new Proxy(text_fragments,{
-	get(o,field){
-		if(field in Fragments) return Fragments[field]
-		return null
-	}
-})
+module.exports = new Proxy(text_fragments,{ get(o,field){ return field in Fragments ? Fragments[field]:null } })
 
-//shared actions
+//scope actions
 function escape(text){ return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') }
 
 function get_fragment(text,start,end){

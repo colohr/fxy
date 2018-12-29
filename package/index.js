@@ -1,101 +1,87 @@
 const fs = require('fs')
 const path = require('path')
-const class_names = ['FSWatcher', 'ReadStream', 'Stats', 'WriteStream', 'Jsons', 'SyncWriteStream']
+const class_names = ['FSWatcher', 'ReadStream', 'Stats', 'WriteStream', 'SyncWriteStream']
 const prevent_promise = ['exists', 'constants', 'createReadStream', 'createWriteStream'].concat(class_names)
 
 const fxy = {
 	//get values as other value types
-	get ['as']() {
-		return require('./as')
-	},
-	//app json
-	get app(){
-		return require('./app')
-	},
-	//copy options
-	get copy() {
-		return require('./copier')
-	},
-	//copy folder
-	get copy_folder(){
-		return this.copy.directory
-	},
-	get data(){
-		return require('./data')
-	},
-	//get value with dot notation
-	get dot() {
-		return require('./dot')
-	},
-	//extname - period
+	get ['as']() { return require('./as') },
+
+	//clean objects of invaluable field values
+	get clean(){ return require('./clean') },
+	//tools to copy assets
+	get copy() { return require('./copier') },
+	//recursive copying of folder contents
+	get copy_folder(){ return this.copy.directory },
+
+	//data of object or iterable class
+	get data(){ return this.object.data },
+	//define object properties
+	get define(){ return this.object.define },
+	//mutate object values by dot notation
+	get dot() { return require('./dot') },
+
+	//entries of object or iterable class
+	get entries(){ return this.object.entries },
+	//returns extension of file without a period
 	extension(x){ return path.extname(x).replace('.','').toLowerCase() },
+	//creates object for folder contents as field = require(field/index.js or field.js)
+	get ['export'](){ return require('./export') },
+
 	//folder name of an file system location
-	folder_name(x){
-		let extension = path.extname(x)
-		let folder_name = path.basename(x)
-		if(extension.length) folder_name = path.basename(x.replace(folder_name,''))
-		return folder_name
-	},
+	get folder_name(){ return require('./folder').name },
+	//find fragments within text
 	get fragment(){ return require('./fragment') },
-	//text reformatting for various cases/identities
-	get id() {
-		return require('./id')
-	},
-	//is type using fs.stats
-	get is() {
-		return require('./is')
-	},
-	//file item object
-	get Item(){
-		return require('./Item')
-	},
+
+	//format functions for text fragments
+	get id() { return require('./id') },
+	//value type functions
+	get is() { return require('./is') },
+	//class FileItem
+	get Item(){ return require('./Item') },
+
 	//json files
-	get json() {
-		return require('./json')
-	},
-	//list files & directories
-	get list() {
-		return require('./list')
-	},
-	//get media info/meta
-	get media(){
-		return require('./media')
-	},
-	//make a folder
-	get make_folder(){
-		return require('./make_folder')
-	},
-	//make a folders is same as fxy.mkdirp
-	get make_folders(){
-		return this.mkdirp
-	},
-	//included in fxy but use make_dir for promise
-	get mkdirp() {
-		return require('mkdirp')
-	},
+	get json() { return require('./json') },
+	//list folder contents
+	get list() { return require('./list') },
+
+	//create folder locations
+	get make_folder(){ return require('./make_folder') },
+	//media/mime/content-type information for files
+	get media(){ return require('./media') },
+	//convert and read .meta or .yaml files
+	get meta(){ return require('./meta') },
+	//the official mkdirp
+	get mkdirp() { return require('mkdirp') },
+
+	//recursive annotations of field + value set
+	get notate(){ return require('./notate') },
+
+	//converter & definitions of an object's field + value set
+	get object(){ return require('./object') },
+
+	get project(){ return require('./project') },
+
 	//read file system item as fxy.Item
-	get read_item(){
-		return this.Item.read
-	},
-	//source url or path fixologist
-	get source(){
-		return require('./source')
-	},
+	get read_item(){ return this.Item.read },
+
+	//source url
+	get source(){ return require('./source') },
+	//source url class
+	get SourceURL(){ return require('./source/SourceURL') },
+
 	//template strings
-	get tag() {
-		return require('./tag')
-	},
+	get tag() { return require('./tag') },
 	//directory tree
-	get tree() {
-		return require('./tree')
-	},
+	get tree() { return require('./tree') },
+
 	//basic url module
-	get url(){
-		return require('./url')
-	},
-	get version(){
-		return require('../package.json').version
-	}
+	get url(){ return require('./url') },
+
+	//values of object or iterable classes
+	get values(){ return this.object.values },
+	//version of fxy module
+	get version(){ return require('../package.json').version }
 }
 
 //exports

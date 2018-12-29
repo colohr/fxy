@@ -5,7 +5,7 @@ module.exports = make_directories
 module.exports.promise = make_directories
 module.exports.sync = make_directories_sync
 
-//shared actions
+//scope actions
 function make_directories(path){
   return new Promise((success,error)=>{
     return mkdirp(path,err=>{

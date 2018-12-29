@@ -1,6 +1,7 @@
 const path = require('path')
 
 //exports
+module.exports = value=>require('./SourceURL').create(value)
 module.exports.file = get_file
 module.exports.folder = get_folder
 module.exports.url = get_url
