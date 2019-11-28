@@ -7,7 +7,11 @@ const Fragments = {
 }
 
 //exports
-module.exports = new Proxy(text_fragments,{ get(o,field){ return field in Fragments ? Fragments[field]:null } })
+module.exports = new Proxy(text_fragments,{
+	get(o,field){ return field in Fragments ? Fragments[field]:null },
+	has(o, field){ return field in Fragments || field in text_fragments },
+	ownKeys(target){ return Array.from(new Set(Object.getOwnPropertyNames(target).concat(Object.getOwnPropertyNames(Fragments)))) }
+})
 
 //scope actions
 function escape(text){ return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') }

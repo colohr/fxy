@@ -11,6 +11,7 @@ is_url_value.instance = is_url_instance
 module.exports = {
 	action:is_action,
 	async:is_async,
+	argument: is_argument,
 	array:is_array,
 	class:is_class,
 	count:is_count,
@@ -62,7 +63,7 @@ function is_action(value){
 		else try{ return (value(),true) }catch(e){ return false }
 	}
 }
-
+function is_argument(value){ return Object.prototype.toString.call(value) === '[object Arguments]' }
 function is_array(value){ return is_object(value) && Array.isArray(value) }
 function is_async(value){ return types.isAsyncFunction(value) }
 function is_class(value){ return is_function(value) && !is_action(value) }
@@ -134,5 +135,5 @@ function is_symbol(value){ return typeof value === 'symbol' || types.isSymbolObj
 function is_text(value){ return typeof value === 'string' || types.isStringObject(value) }
 function is_TF(value){return typeof value === 'boolean'}
 function is_url(value,...protocols){ return is_protocoled(value,...protocols) }
-function is_url_instance(value){ return is_data(value) && (value instanceof require('url').URL || value instanceof require('url').Url) }
+function is_url_instance(value){ return is_data(value) && (value instanceof require('url').Url) }
 

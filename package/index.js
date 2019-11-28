@@ -4,9 +4,15 @@ const class_names = ['FSWatcher', 'ReadStream', 'Stats', 'WriteStream', 'SyncWri
 const prevent_promise = ['exists', 'constants', 'createReadStream', 'createWriteStream'].concat(class_names)
 
 const fxy = {
+	//returns Arguments instance
+	get argument(){ return require('./argument') },
 	//get values as other value types
 	get ['as']() { return require('./as') },
 
+	//call a class constructor
+	get call(){ return require('./call') },
+	//instance type casting and identifier
+	get cast(){ return require('./cast') },
 	//clean objects of invaluable field values
 	get clean(){ return require('./clean') },
 	//tools to copy assets
@@ -30,11 +36,15 @@ const fxy = {
 
 	//folder name of an file system location
 	get folder_name(){ return require('./folder').name },
+	//flip/invert true/false value returned from provided method
+	get flip(){ return this.call.flip },
 	//find fragments within text
 	get fragment(){ return require('./fragment') },
 
 	//format functions for text fragments
 	get id() { return require('./id') },
+	//call provided method during iterations of array entries
+	get inset(){ return this.call.inset },
 	//value type functions
 	get is() { return require('./is') },
 	//class FileItem
@@ -75,6 +85,8 @@ const fxy = {
 	//directory tree
 	get tree() { return require('./tree') },
 
+	//unique identifier
+	get uid(){ return require('./uid') },
 	//basic url module
 	get url(){ return require('./url') },
 

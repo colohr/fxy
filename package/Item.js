@@ -51,15 +51,6 @@ function get_stat_type(location,stat,keep){
 	return type
 	//shared actions
 	function get_inputs(){ return [type.extension=PATH.extname(location),type.name,location,keep] }
-	//if(stat.isFile()){
-	//	if(is_valid_location(PATH.extname(location),name,location,keep)) type.file = true
-	//	else return null
-	//}
-	//else if(stat.isDirectory()){
-	//	type.directory = true
-	//	type.name = name
-	//	type.keeps = keep
-	//}
 }
 
 function is_valid_file(type,name,keep){

@@ -25,7 +25,7 @@ class SourceURL{
 	static get search_text(){ return get_search_text }
 
 	constructor(data){
-		this.url = new (require('url').URL)(default_url)
+		this.url = new (require('url').Url)(default_url)
 		this.data = data
 	}
 	get authentication(){ return get_authentication(this) }
@@ -59,7 +59,7 @@ class SourceURL{
 
 	get subdomain(){ return this.domain.split('.')[0] }
 
-	get text(){ return `${this.url}` }
+	get text(){ return `${require('url').format(this.url)}` }
 
 	toJSON(){ return source_json(this) }
 	toString(){ return this.text }

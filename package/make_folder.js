@@ -10,7 +10,7 @@ function make_folders(folder){
   return new Promise(make_folders_promise)
   //scope actions
   function make_folders_promise(success,failed){
-    mkdirp(on_response)
+    mkdirp(folder,on_response)
     //scope actions
     function on_response(error){
       if(error) failed(error)
